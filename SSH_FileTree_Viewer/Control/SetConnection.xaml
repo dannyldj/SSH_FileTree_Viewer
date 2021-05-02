@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="SSH_FileTree_Viewer.Control.SetConnection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodel="clr-namespace:SSH_FileTree_Viewer.ViewModel"
+             xmlns:properties="clr-namespace:SSH_FileTree_Viewer.Properties"
+             xmlns:local="clr-namespace:SSH_FileTree_Viewer.Control"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodel:SetConnectionViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <ContextMenu x:Key="ModifyMenu">
+            <MenuItem Header="Load" Command="{Binding IpLoadCommand}"/>
+            <MenuItem Header="Delete" Command="{Binding IpDelCommand}"/>
+        </ContextMenu>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="100,30,0,30"
+                    Orientation="Horizontal">
+            <TextBlock Text="Connect to "/>
+            <TextBlock Text="{Binding Source={x:Static properties:Settings.Default},
+                                      Path=connectingIp}"
+                       FontWeight="Bold"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Address"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Text="{Binding EnteredIp}"/>
+                <Button Content="➕" Grid.Column="1"
+                        Height="{Binding RelativeSource={RelativeSource Self}, 
+                                         Path=ActualWidth}"
+                        Command="{Binding IpAddCommand}"/>
+            </Grid>
+
+            <ListView ItemsSource="{Binding Source={x:Static properties:Settings.Default},
+                                            Path=savedIps}"
+                      SelectedIndex="{Binding SelectedIpIndex}"
+                      ContextMenu="{StaticResource ModifyMenu}"
+                      Height="200"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
